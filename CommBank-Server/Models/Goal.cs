@@ -1,7 +1,8 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
-namespace CommBank.Models;
+namespace CommBank_Server.Models;
 
 public class Goal
 {
@@ -9,15 +10,15 @@ public class Goal
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
-    public string? Name { get; set; }
+    [BsonElement("Name")]
+    public string? Title { get; set; } = null!;
 
-    public UInt64 TargetAmount { get; set; } = 0;
+    public string? Description { get; set; }
+
+    [BsonIgnoreIfNull]
+    public string? Icon { get; set; }
 
     public DateTime TargetDate { get; set; }
-
-    public double Balance { get; set; } = 0.00;
-
-    public DateTime Created { get; set; } = DateTime.Now;
 
     [BsonRepresentation(BsonType.ObjectId)]
     public List<string>? TransactionIds { get; set; }

@@ -1,53 +1,44 @@
-﻿using CommBank.Models;
-using CommBank.Services;
+using CommBank_Server.Services;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+// 1. Configure MongoDB Connection
+// This reads from the "MongoDB" section in your appsettings.json
+var mongoConnectionString = builder.Configuration.GetSection("MongoDB")["ConnectionString"];
+var mongoDatabaseName = builder.Configuration.GetSection("MongoDB")["DatabaseName"];
 
+if (string.IsNullOrEmpty(mongoConnectionString) || string.IsNullOrEmpty(mongoDatabaseName))
+{
+    throw new Exception("MongoDB ConnectionString or DatabaseName is missing in appsettings.json");
+}
+
+var mongoClient = new MongoClient(mongoConnectionString);
+var mongoDatabase = mongoClient.GetDatabase(mongoDatabaseName);
+
+// 2. Register Services for Dependency Injection
+builder.Services.AddSingleton(mongoDatabase);
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IGoalsService, GoalsService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
+
+// 3. Add Standard API Services
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Configuration.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("Secrets.json");
-
-var mongoClient = new MongoClient(builder.Configuration.GetConnectionString("CommBank"));
-var mongoDatabase = mongoClient.GetDatabase("CommBank");
-
-IAccountsService accountsService = new AccountsService(mongoDatabase);
-IAuthService authService = new AuthService(mongoDatabase);
-IGoalsService goalsService = new GoalsService(mongoDatabase);
-ITagsService tagsService = new TagsService(mongoDatabase);
-ITransactionsService transactionsService = new TransactionsService(mongoDatabase);
-IUsersService usersService = new UsersService(mongoDatabase);
-
-builder.Services.AddSingleton(accountsService);
-builder.Services.AddSingleton(authService);
-builder.Services.AddSingleton(goalsService);
-builder.Services.AddSingleton(tagsService);
-builder.Services.AddSingleton(transactionsService);
-builder.Services.AddSingleton(usersService);
-
-builder.Services.AddCors();
-
 var app = builder.Build();
 
-app.UseCors(builder => builder
-   .AllowAnyOrigin()
-   .AllowAnyMethod()
-   .AllowAnyHeader());
-
+// 4. Configure the HTTP Request Pipeline
 if (app.Environment.IsDevelopment())
 {
+    // Enables the Swagger UI for testing at /swagger
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
-

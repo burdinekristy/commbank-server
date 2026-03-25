@@ -1,14 +1,13 @@
-﻿using CommBank.Models;
+using CommBank_Server.Models;
 
-namespace CommBank.Services
+namespace CommBank_Server.Services;
+
+public interface IGoalsService
 {
-    public interface IGoalsService
-    {
-        Task CreateAsync(Goal newGoal);
-        Task<List<Goal>> GetAsync();
-        Task<List<Goal>?> GetForUserAsync(string id);
-        Task<Goal?> GetAsync(string id);
-        Task RemoveAsync(string id);
-        Task UpdateAsync(string id, Goal updatedGoal);
-    }
+    Task<List<Goal>> GetAsync();
+    Task<List<Goal>?> GetForUserAsync(string id);
+    Task<Goal?> GetAsync(string id);
+    Task CreateAsync(Goal newGoal);
+    Task UpdateAsync(string id, Goal updatedGoal);
+    Task RemoveAsync(string id);
 }

@@ -1,7 +1,8 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
-namespace CommBank.Models;
+namespace CommBank_Server.Models;
 
 public class User
 {
@@ -9,18 +10,10 @@ public class User
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
-    public string? Name { get; set; }
-
-    public string? Email { get; set; }
-
+    public string Username { get; set; } = null!;
+    public string Email { get; set; } = null!;
     public string? Password { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
-    public List<string>? AccountIds { get; set; }
-
-    [BsonRepresentation(BsonType.ObjectId)]
-    public List<string>? GoalIds { get; set; }
-
-    [BsonRepresentation(BsonType.ObjectId)]
-    public List<string>? TransactionIds { get; set; }
+    public List<string>? GoalIds { get; set; } = new();
 }

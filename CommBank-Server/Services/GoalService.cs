@@ -1,7 +1,7 @@
-﻿using CommBank.Models;
+using CommBank_Server.Models; // Updated to match your project namespace
 using MongoDB.Driver;
 
-namespace CommBank.Services;
+namespace CommBank_Server.Services; // Updated to match your project namespace
 
 public class GoalsService : IGoalsService
 {
@@ -9,6 +9,7 @@ public class GoalsService : IGoalsService
 
     public GoalsService(IMongoDatabase mongoDatabase)
     {
+        // This connects to the "Goals" collection in your MongoDB Atlas
         _goalsCollection = mongoDatabase.GetCollection<Goal>("Goals");
     }
 

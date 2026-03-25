@@ -1,13 +1,12 @@
-﻿using CommBank.Models;
+using CommBank_Server.Models;
 
-namespace CommBank.Services
+namespace CommBank_Server.Services;
+
+public interface IUsersService
 {
-    public interface IUsersService
-    {
-        Task CreateAsync(User newUser);
-        Task<List<User>> GetAsync();
-        Task<User?> GetAsync(string id);
-        Task RemoveAsync(string id);
-        Task UpdateAsync(string id, User updatedUser);
-    }
+    Task<List<User>> GetAsync();
+    Task<User?> GetAsync(string id);
+    Task CreateAsync(User newUser);
+    Task UpdateAsync(string id, User updatedUser);
+    Task RemoveAsync(string id);
 }

@@ -1,9 +1,9 @@
-﻿using CommBank.Models;
+using CommBank_Server.Models;
 
-namespace CommBank.Services
+namespace CommBank_Server.Services;
+
+public interface IAuthService
 {
-    public interface IAuthService
-    {
-        Task<User?> Login(string email, string password);
-    }
+    Task<User?> Login(string email, string password);
+    Task<User?> Register(User user);
 }

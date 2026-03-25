@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using CommBank.Services;
-using CommBank.Models;
+using Microsoft.AspNetCore.Mvc;
+using CommBank_Server.Services; // Updated underscore
+using CommBank_Server.Models;   // Updated underscore
 
-namespace CommBank.Controllers;
+namespace CommBank_Server.Controllers; // Updated underscore
 
 [ApiController]
 [Route("api/[controller]")]

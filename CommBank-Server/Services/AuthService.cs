@@ -1,8 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using CommBank.Models;
+using CommBank_Server.Models;
 using MongoDB.Driver;
 
-namespace CommBank.Services;
+namespace CommBank_Server.Services;
 
 public class AuthService : IAuthService
 {
@@ -13,22 +12,12 @@ public class AuthService : IAuthService
         _usersCollection = mongoDatabase.GetCollection<User>("Users");
     }
 
-    public async Task<User?> Login(string email, string password)
+    public async Task<User?> Login(string email, string password) => 
+        await _usersCollection.Find(u => u.Email == email && u.Password == password).FirstOrDefaultAsync();
+
+    public async Task<User?> Register(User user)
     {
-        var user = await _usersCollection
-            .Find(x => x.Email == email)
-            .FirstOrDefaultAsync();
-
-        if (user is not null)
-        {
-            var isCorrectPassword = BCrypt.Net.BCrypt.Verify(password, user.Password);
-
-            if (isCorrectPassword)
-            {
-                return user;
-            }
-        }
-
-        return null;
+        await _usersCollection.InsertOneAsync(user);
+        return user;
     }
 }
