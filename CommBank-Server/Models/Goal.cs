@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace CommBank_Server.Models;
 
+[BsonIgnoreExtraElements]
 public class Goal
 {
     [BsonId]
@@ -17,7 +18,8 @@ public class Goal
 
     [BsonIgnoreIfNull]
     public string? Icon { get; set; }
-
+    
+    public decimal? TargetAmount { get; set; }
     public DateTime TargetDate { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
