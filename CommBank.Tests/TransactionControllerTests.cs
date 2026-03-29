@@ -1,58 +1,38 @@
-﻿using CommBank.Controllers;
-using CommBank.Services;
+﻿using Xunit;
+using Microsoft.AspNetCore.Mvc;
 using CommBank.Models;
+using CommBank.Services;
 using CommBank.Tests.Fake;
+using CommBank.Controllers;
+
+using Transaction = CommBank.Models.Transaction; 
 
 namespace CommBank.Tests;
 
 public class TransactionControllerTests
 {
-    private readonly FakeCollections collections;
+    private readonly FakeCollections _collections;
 
     public TransactionControllerTests()
     {
-        collections = new();
+        _collections = new FakeCollections();
     }
 
     [Fact]
-    public async void GetAll()
+    public async Task GetForUser_ReturnsOnlyTransactionsForThatUser()
     {
-        // Arrange
-        var transactions = collections.GetTransactions();
-        ITransactionsService service = new FakeTransactionsService(transactions, transactions[0]);
-        TransactionController controller = new(service);
+        var allTransactions = _collections.GetTransactions();
+        var users = _collections.GetUsers();
+        var targetUserId = users[0].Id!;
 
-        // Act
-        var httpContext = new Microsoft.AspNetCore.Http.DefaultHttpContext();
-        controller.ControllerContext.HttpContext = httpContext;
-        var result = await controller.Get();
+        var service = new FakeTransactionsService(allTransactions, allTransactions[0]);
+        var controller = new TransactionController(service);
 
-        // Assert
-        var index = 0;
-        foreach (Transaction transaction in result)
-        {
-            Assert.IsAssignableFrom<Transaction>(transaction);
-            Assert.Equal(transactions[index].Id, transaction.Id);
-            index++;
-        }
-    }
+        var result = await controller.GetForUser(targetUserId);
 
-    [Fact]
-    public async void Get()
-    {
-        // Arrange
-        var transactions = collections.GetTransactions();
-        ITransactionsService service = new FakeTransactionsService(transactions, transactions[0]);
-        TransactionController controller = new(service);
+        var returned = Assert.IsAssignableFrom<IEnumerable<Transaction>>(result);
 
-        // Act
-        var httpContext = new Microsoft.AspNetCore.Http.DefaultHttpContext();
-        controller.ControllerContext.HttpContext = httpContext;
-        var result = await controller.Get(transactions[0].Id!);
-
-        // Assert
-        Assert.IsAssignableFrom<Transaction>(result.Value);
-        Assert.Equal(transactions[0], result.Value);
-        Assert.NotEqual(transactions[1], result.Value);
+        Assert.NotNull(returned);
+        Assert.All(returned, t => Assert.Equal(targetUserId, t.UserId));
     }
 }

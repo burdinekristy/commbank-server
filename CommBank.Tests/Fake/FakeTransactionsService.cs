@@ -5,8 +5,8 @@ namespace CommBank.Tests.Fake;
 
 public class FakeTransactionsService : ITransactionsService
 {
-    List<Transaction> _transactions;
-    Transaction _transaction;
+    private readonly List<Transaction> _transactions;
+    private readonly Transaction _transaction;
 
     public FakeTransactionsService(List<Transaction> transactions, Transaction transaction)
     {
@@ -14,21 +14,21 @@ public class FakeTransactionsService : ITransactionsService
         _transaction = transaction;
     }
 
-    public async Task<List<Transaction>> GetAsync() =>
-        await Task.FromResult(_transactions);
-
     public async Task<List<Transaction>?> GetForUserAsync(string id) =>
+        await Task.FromResult(_transactions.Where(t => t.UserId == id).ToList());
+
+    public async Task<List<Transaction>> GetAsync() =>
         await Task.FromResult(_transactions);
 
     public async Task<Transaction?> GetAsync(string id) =>
         await Task.FromResult(_transaction);
 
     public async Task CreateAsync(Transaction newTransaction) =>
-        await Task.FromResult(true);
+        await Task.CompletedTask;
 
     public async Task UpdateAsync(string id, Transaction updatedTransaction) =>
-        await Task.FromResult(true);
+        await Task.CompletedTask;
 
     public async Task RemoveAsync(string id) =>
-        await Task.FromResult(true);
+        await Task.CompletedTask;
 }

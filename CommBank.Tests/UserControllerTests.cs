@@ -1,6 +1,6 @@
-﻿using CommBank.Controllers;
-using CommBank.Services;
-using CommBank.Models;
+﻿using CommBank_Server.Controllers;
+using CommBank_Server.Services;
+using CommBank_Server.Models;
 using CommBank.Tests.Fake;
 
 namespace CommBank.Tests;
@@ -33,7 +33,7 @@ public class UserControllerTests
         {
             Assert.IsAssignableFrom<User>(user);
             Assert.Equal(users[index].Id, user.Id);
-            Assert.Equal(users[index].Name, user.Name);
+            Assert.Equal(users[index].Username, user.Username);
             index++;
         }
     }

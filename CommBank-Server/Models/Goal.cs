@@ -12,7 +12,7 @@ public class Goal
     public string? Id { get; set; }
 
     [BsonElement("Name")]
-    public string? Title { get; set; } = null!;
+    public string? Name { get; set; }
 
     public string? Description { get; set; }
 

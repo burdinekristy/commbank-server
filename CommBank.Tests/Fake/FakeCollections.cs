@@ -1,4 +1,7 @@
 ﻿using CommBank.Models;
+using CommBank_Server.Models;
+using CommBank.Services;
+using CommBank_Server.Services;
 
 namespace CommBank.Tests.Fake
 {
@@ -53,12 +56,14 @@ namespace CommBank.Tests.Fake
             {
                 new()
                 {
-                    Id = "1"
+                    Id = "1",
+                    Name = "Groceries"
                 },
 
                 new()
                 {
-                    Id = "2"
+                    Id = "2",
+                    Name = "Entertainment"
                 }
             };
 
@@ -80,19 +85,22 @@ namespace CommBank.Tests.Fake
                 new()
                 {
                     Id = "1",
-                    Name = "Tag"
+                    Username = "Tag",
+                    Email = "tag@example.com"
                 },
 
                 new()
                 {
                     Id = "2",
-                    Name = "Trot"
+                    Username = "Trot",
+                    Email = "trot@example.com"
                 },
 
                 new()
                 {
                     Id = "3",
-                    Name = "Tugg"
+                    Username = "Tugg",
+                    Email = "tugg@example.com"
                 }
             };
         }

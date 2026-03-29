@@ -20,12 +20,12 @@ public class FakeTagsService : ITagsService
     public async Task<Tag?> GetAsync(string id) =>
         await Task.FromResult(_tag);
 
-    public async Task CreateAsync(Tag newTag) =>
-        await Task.FromResult(true);
+    public Task CreateAsync(Tag newTag) =>
+        Task.CompletedTask;
 
-    public async Task UpdateAsync(string id, Tag updatedTag) =>
-        await Task.FromResult(true);
+    public Task UpdateAsync(string id, Tag updatedTag) =>
+        Task.CompletedTask;
 
-    public async Task RemoveAsync(string id) =>
-        await Task.FromResult(true);
+    public Task RemoveAsync(string id) =>
+        Task.CompletedTask;
 }
